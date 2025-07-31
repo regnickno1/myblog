@@ -1,32 +1,26 @@
-name: Deploy Hexo
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch: # Cho phép chạy thủ công từ tab Actions
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install
-        working-directory: ./
-
-      - name: Generate static files
-        run: npx hexo generate
-        working-directory: ./
+          path: ./public
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+        id: deployment
+        uses: actions/deploy-pages@v4
