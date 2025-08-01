@@ -1,4 +1,4 @@
 ---
-title: Test Post 01
+title: Test
 ---
 Welcome to Halo
